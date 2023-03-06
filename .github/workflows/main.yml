@@ -19,11 +19,22 @@ jobs:
           echo "GIT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
 
       - name: Install Dependencies
-        run: brew install p7zip
-        env:
+        run: |
+         if ! command -v brew &> /dev/null; then
+        echo "Error: brew is not installed"
+         exit 1
+         fi
+
+         if ! command -v 7z &> /dev/null; then
+        echo  "Error: 7z is not installed"
+         exit 1
+         fi
+         
+    run: brew install p7zip
+    env:
           HOMEBREW_NO_INSTALL_CLEANUP: 1
           HOMEBREW_NO_AUTO_UPDATE: 1
-
+              
       - name: Build Clover Pack
         run: |
           chmod +x ./buildme
